@@ -1,7 +1,5 @@
-export const conf = {
+module.exports = {
   eslint: {
     ignoreDuringBuilds: true,
   },
 }
-
-export default conf
