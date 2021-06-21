@@ -1,6 +1,6 @@
 {
-  "name": "nextjs",
-  "version": "4.0.0",
+  "name": "1mmucity",
+  "version": "0.0.1",
   "private": true,
   "dependencies": {
     "@material-ui/core": "latest",
