@@ -34,6 +34,8 @@
     },
     "globals": {
         "process": true,
-        "module": true
+        "module": true,
+        "Buffer": true,
+        "require": true
     }
 }

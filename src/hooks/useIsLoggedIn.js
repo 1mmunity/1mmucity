@@ -4,11 +4,11 @@ import cookies from 'js-cookie'
 import fetch from '../api/fetch'
 
 /**
- * For pages with protected routes, returns profile.
+ * Check for logged in dudes
  * @param {Function} setProfile 
  * @returns profile
  */
-export const useProtectedRoute = async () => {
+export const useIsLoggedIn = async () => {
   const eprofile = cookies.get(cconfig.profile)
   let dprofile
   try {
@@ -17,20 +17,14 @@ export const useProtectedRoute = async () => {
     dprofile = null
   }
   const profile = utils.isJSON(dprofile)
-  if (!profile?.token) {
-    window.location.href = '/login'
-    return
-  }
+  if (!profile?.token) return false
   const user = await fetch('/users/@me', {
     headers: {
       'Authorization': `user ${profile.token}`
     }
   })
-  if (!user) {
-    window.location.href = '/login'
-    return
-  }
+  if (!user) return false
   return user
 }
 
-export default useProtectedRoute
+export default useIsLoggedIn

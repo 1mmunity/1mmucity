@@ -1,3 +1,7 @@
 {
-  "profile": "_PR"
+  "profile": "_PR",
+  "rm": {
+    "email": "_RME",
+    "password": "_RMP"
+  }
 }

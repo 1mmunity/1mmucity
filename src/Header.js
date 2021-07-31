@@ -7,6 +7,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  Typography
 } from '@material-ui/core'
 import {
   Button
@@ -18,6 +19,8 @@ import {
 } from '@material-ui/icons'
 import Drawer from './Drawer'
 import Divider from './Divider'
+import Badge from './Badge'
+import useIsLoggedIn from './hooks/useIsLoggedIn'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -44,6 +47,13 @@ const useStyles = makeStyles(theme => ({
   },
   menuSignup: {
     color: theme.palette.primary.main
+  },
+  white: {
+    color: '#ffffff',
+    fontSize: '32px'
+  },
+  wht: {
+    color: '#fff'
   }
 }))
 
@@ -52,6 +62,7 @@ function ListItemLink(props) {
 }
 
 export default function Header() {
+  const [profile, setProfile] = React.useState(null)
   const [menuOpen, setMenuOpen] = React.useState(false)
   const toggleDrawer = (state) => (e) => {
     if (e.type === 'keydown' && (e.key === 'Tab' || e.key === 'Shift')) {
@@ -60,6 +71,15 @@ export default function Header() {
     setMenuOpen(state)
   }
   const classes = useStyles()
+  React.useEffect(() => {
+    useIsLoggedIn()
+      .then((res) => {
+        setProfile(res.data)
+      })
+      .catch(() => {
+        setProfile('')
+      })
+  }, [])
   return (
     <AppBar className={classes.root} position='sticky'>
       <Toolbar>
@@ -73,22 +93,58 @@ export default function Header() {
             />
           </Link>
         </div>
-        <Button color='primary' variant='outlined'>Login</Button>
         <IconButton onClick={toggleDrawer(true)}>
-          <IconMenu color='secondary'/>
+          <IconMenu className={classes.white}/>
         </IconButton>
         <Drawer anchor='right' open={menuOpen} onClose={toggleDrawer(false)}>
           <List>
-            <ListItem>
-              <Button color='primary' variant='outlined' href='/auth/login' fullWidth>Login</Button>
-            </ListItem>
-            <ListItem>
-              <Button color='primary' variant='contained' href='/auth/signup' fullWidth>Sign In</Button>
-            </ListItem>
+            {profile ? <>
+              <ListItem>
+                <ListItemText primary={
+                  <>
+                    <Typography variant='body2'>
+                      Logged in as
+                    </Typography>
+                    <Link href='/~' className={classes.wht} style={{
+                      textDecoration: profile.name_styles.underline ? 'underline' : 'none',
+                      fontWeight: profile.name_styles.bold ? 'bold' : 'normal',
+                      background: profile.name_styles.gradient ? `linear-gradient(${profile.name_styles.gradient})` : 'none',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: profile.name_styles.gradient ? 'transparent' : profile.name_styles.color
+                    }}>
+                      {profile.name}#{profile.discriminator}
+                    </Link>
+                  </>
+                } />
+              </ListItem>
+            </> : <>
+              {profile === '' ? <>
+                <ListItem>
+                  <Typography variant='body2'>
+                    Cannot connect to the API.
+                  </Typography>
+                </ListItem>
+              </> : ''}
+              <ListItem>
+                <Button color='primary' variant='outlined' href='/login' fullWidth>Login</Button>
+              </ListItem>
+              <ListItem>
+                <Button color='primary' variant='contained' href='/signup' fullWidth>Sign In</Button>
+              </ListItem>
+            </>}
             <Divider />
-            <ListItemLink href='/pichat'>
-              <ListItemText primary='PiChat - Chat with others' />
+            <ListItemLink href='/update-logs'>
+              <ListItemText primary={
+                <>
+                  Update Logs <Badge bgimage='linear-gradient(to top right, rgb(101, 115, 255), rgb(111, 114, 247), rgb(120, 114, 239), rgb(130, 113, 231), rgb(139, 112, 223), rgb(149, 111, 215), rgb(158, 111, 208), rgb(168, 110, 200), rgb(177, 109, 192), rgb(187, 108, 184), rgb(196, 108, 176), rgb(206, 107, 168))'>NEW</Badge>
+                </>}/>
             </ListItemLink>
+            {/* <ListItemLink href='/groop'>
+              <ListItemText primary={
+                <>
+                  Groop <Badge bgimage='radial-gradient( circle farthest-corner at 10% 20%,  rgba(215,75,80,1) 0%, rgba(243,146,32,1) 100.2% );'>TESTERS ONLY</Badge>
+                </>}/>
+            </ListItemLink> */}
           </List>
         </Drawer>
       </Toolbar>
