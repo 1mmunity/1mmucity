@@ -5,7 +5,7 @@ Built with Next.js
 Not completed, estimated finish time is next month after bugs are fixed and tested properly.
 
 # Bugs
-- Memory leak, help fix pls
+- Memory leak help fix pls
 ![1mmucity mem leak bug](https://i.imgur.com/wSxnogP.png "1mmucity mem leak bug")
 
 # Screenshots
