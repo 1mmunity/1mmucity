@@ -4,7 +4,5 @@ module.exports = withTM({
   eslint: {
     ignoreDuringBuilds: true,
   },
-  future: {
-    webpack5: true
-  }
+  webpack5: true
 })
